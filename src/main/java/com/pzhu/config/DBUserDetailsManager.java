@@ -9,10 +9,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Component
 public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPasswordService {
     @Resource
     private UserMapper userMapper;
@@ -21,9 +23,17 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
         return null;
     }
 
-    @Override
-    public void createUser(UserDetails user) {
+    /**
+     * 在数据库中插入新的用户信息
+     * @param userDetails
+     */
+    public void createUser(UserDetails userDetails) {
 
+        User user = new User();
+        user.setUsername(userDetails.getUsername());
+        user.setPassword(userDetails.getPassword());
+        user.setEnabled(true);
+        userMapper.insert(user);
     }
 
     @Override

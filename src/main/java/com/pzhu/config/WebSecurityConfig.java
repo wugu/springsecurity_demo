@@ -30,17 +30,19 @@ public class WebSecurityConfig {
         //authorizeRequests()：开启授权保护
         //anyRequest()：对所有请求开启授权保护
         //authenticated()：已认证请求会自动被授权
-        http.authorizeRequests(
-                authorize -> authorize.anyRequest().authenticated())
-                .formLogin(withDefaults())//表单授权方式
-                .httpBasic(withDefaults());//基本授权方式
-
+        http.authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().authenticated()
+                )
+                .formLogin(withDefaults());//表单授权方式
+                //.httpBasic(withDefaults());//基本授权方式
+        //关闭csrf攻击防御
+        http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
         return http.build();
     }
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService(){
         //创建基于数据库的用户信息管理器
         DBUserDetailsManager manager = new DBUserDetailsManager();
         return manager;
-    }
+    }*/
 }
