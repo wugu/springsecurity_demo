@@ -70,8 +70,9 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
         if (user == null) {
             throw new UsernameNotFoundException(username);
         } else {
-            Collection<GrantedAuthority> authorities = new ArrayList<>();
-
+            /*Collection<GrantedAuthority> authorities = new ArrayList<>();
+            //authorities.add(()->"USER_LIST");
+            authorities.add(()->"USER_ADD");
             return new org.springframework.security.core.userdetails.User(
                     user.getUsername(),
                     user.getPassword(),
@@ -80,7 +81,16 @@ public class DBUserDetailsManager implements UserDetailsManager, UserDetailsPass
                     true,//用户凭证是否过期
                     true,//用户是否未被锁定
                     authorities//权限列表
-            );
+            );*/
+            return org.springframework.security.core.userdetails.User
+                    .withUsername(user.getUsername())
+                    .password(user.getPassword())
+                    .disabled(!user.getEnabled())
+                    .credentialsExpired(false)//是否过期
+                    .accountLocked(false)
+                    .roles("ADMIN")
+                    .authorities("USER_ADD","USER_LIST")//添加权限字符串
+                    .build();
         }
 
 
